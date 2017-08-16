@@ -3,9 +3,10 @@ from flask import Flask
 from flask_cors import CORS
 from flask_restful import Api
 
-from api import LOGO
+import import_data
+from api import LOGO, api_bp
 from api.goods.views import Goods, GoodsList
-from settings import base_config as conf, import_data
+from settings import config as conf
 # Buzzni Database Config
 from settings.database import db, mongo
 from settings.logging import logger
@@ -13,11 +14,8 @@ from settings.logging import logger
 app = Flask(__name__)
 cors = CORS(resources={r"/api/*": {"origins": "*"}})
 # Add Resources Part
-api = Api(app, prefix="/api/v1")
 
-# Stack Part
-api.add_resource(Goods, '/goods/<int:pid>')
-api.add_resource(GoodsList, '/goods')
+api = Api(api_bp)
 
 
 def configure_app(flask_app):
@@ -51,13 +49,19 @@ def initialize_app(flask_app):
     mongo.init_app(flask_app, config_prefix='MONGO')
 
     # Init RESTful API
-    api.init_app(flask_app)
+    # api.init_app(flask_app)
+    api.add_resource(Goods, '/goods/<int:pid>')
+    api.add_resource(GoodsList, '/goods')
+    flask_app.register_blueprint(api_bp)
+
+    # Cors
     cors.init_app(flask_app)
+
 
 if __name__ == '__main__':
     configure_app(app)
     initialize_app(app)
     print(LOGO)
 
-    logger.info('Starting development server at http://{}/api/ <<<<<'.format(app.config['FLASK_SERVER_NAME']))
+    logger.info('Starting server at http://{}/api/ <<<<<'.format(app.config['FLASK_SERVER_NAME']))
     app.run(port=5000, debug=True)
