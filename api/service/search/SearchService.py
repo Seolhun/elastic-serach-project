@@ -1,9 +1,8 @@
 from datetime import datetime
-
-from elasticsearch import Elasticsearch
+from settings.thirdparty import es
 
 # by default we connect to localhost:9200
-es = Elasticsearch()
+
 
 doc = {
     'author': 'kimchy',
@@ -22,3 +21,10 @@ res = es.search(index="test-index", body={"query": {"match_all": {}}})
 print("Got %d Hits:" % res['hits']['total'])
 for hit in res['hits']['hits']:
     print("%(timestamp)s %(author)s: %(text)s" % hit["_source"])
+
+
+def search_text(search_value):
+    query = {
+        'name': search_value
+    }
+    return es.search(body=query, doc_type="ko", index="goods")

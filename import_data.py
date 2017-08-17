@@ -1,11 +1,9 @@
 # import requests
 import threading
 
-from elasticsearch import Elasticsearch
+from settings.thirdparty import es
 from elasticsearch.helpers import bulk
 from sklearn.externals import joblib
-
-es = Elasticsearch(hosts=["http://127.0.0.1:9200"])
 
 
 class IndexDataThread(threading.Thread):

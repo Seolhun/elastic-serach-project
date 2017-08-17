@@ -1,7 +1,3 @@
-from flask import Blueprint
-
-api_bp = Blueprint('/api/v1', __name__)
-
 LOGO = """
 
 ████████   █        █  ██████████   ██████████   █       ███   ██

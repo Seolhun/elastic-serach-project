@@ -8,7 +8,7 @@ import json
 
 from sanic import Sanic
 
-from api.goods import crud_bp
+from api.resources.goods import crud_bp
 
 app = Sanic('test-app')
 app.blueprint(crud_bp)

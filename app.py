@@ -3,8 +3,10 @@ from flask import Flask
 from flask_cors import CORS
 from flask_restful import Api
 
-from api import LOGO, api_bp
-from api.goods.views import Goods, GoodsList
+from api import LOGO
+from api.resources import api_bp
+from api.resources.goods.views import Goods, GoodsList
+from api.resources.search.views import Search
 from settings import config as conf
 # Buzzni Database Config
 from settings.database import db, mongo
@@ -50,6 +52,7 @@ def initialize_app(flask_app):
     # api.init_app(flask_app)
     api.add_resource(Goods, '/goods/<int:pid>')
     api.add_resource(GoodsList, '/goods')
+    api.add_resource(Search, '/search')
     flask_app.register_blueprint(api_bp)
 
     # Cors
