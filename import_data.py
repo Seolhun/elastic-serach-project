@@ -1,9 +1,9 @@
-import json
 # import requests
-from sklearn.externals import joblib
+import threading
+
 from elasticsearch import Elasticsearch
 from elasticsearch.helpers import bulk
-import threading
+from sklearn.externals import joblib
 
 es = Elasticsearch(hosts=["http://127.0.0.1:9200"])
 

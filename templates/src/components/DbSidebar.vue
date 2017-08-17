@@ -8,7 +8,7 @@
         name: 'db-sidebar',
         data() {
             return {
-                msg: 'Dashboard'
+                msg: 'Searching'
             }
         }
     }

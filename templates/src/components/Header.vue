@@ -1,8 +1,8 @@
 <template>
-    <header style="background-color: rgb(10, 47, 88);">
+    <header style="background-color: rgb(255,198,32);">
         <div class="text-logo">{{msg}}</div>
-        <p class="meta">This demo project for express new develop practice demo.</p>
         <ul class="header-operations">
+
         </ul>
     </header>
 </template>
@@ -10,9 +10,9 @@
 <script>
     export default {
         name: 'db-header',
-        data () {
+        data() {
             return {
-                msg: 'SanicCRUD-vue'
+                msg: 'Buzzni Searching Project'
             }
         }
     }
