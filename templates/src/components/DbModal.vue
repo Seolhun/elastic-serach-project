@@ -1,30 +1,26 @@
 <template>
     <el-dialog title="Edit" v-model="dialogFormVisible" :close-on-click-modal="false" :show-close="false">
         <el-form :model="form">
-            <el-form-item label="pid" :label-width="formLabelWidth">
-                <el-input :disabled="true" v-model="form.pid" auto-complete="off"></el-input>
+            <el-form-item label="item_id" :label-width="formLabelWidth">
+                <el-input :disabled="true" v-model="form.id" auto-complete="off"></el-input>
             </el-form-item>
-            <el-form-item label="name" :label-width="formLabelWidth">
-                <el-input :disabled="true" v-model="form.name" auto-complete="off"></el-input>
-            </el-form-item>
-
-            <el-form-item label="site_name" :label-width="formLabelWidth">
-                <el-input :disabled="true" v-model="form.site_name" auto-complete="off"></el-input>
+            <el-form-item label="username" :label-width="formLabelWidth">
+                <el-input :disabled="true" v-model="form.username" auto-complete="off"></el-input>
             </el-form-item>
 
-            <el-form-item label="img" :label-width="formLabelWidth">
-                <el-input v-model="form.img" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="cate1" :label-width="formLabelWidth">
-                <el-input :disabled="true" v-model="form.cate1" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="cate2" :label-width="formLabelWidth">
-                <el-input v-model="form.cate2" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="cate3" :label-width="formLabelWidth">
-                <el-input v-model="form.cate3" auto-complete="off"></el-input>
+            <el-form-item label="email" :label-width="formLabelWidth">
+                <el-input :disabled="true" v-model="form.email" auto-complete="off"></el-input>
             </el-form-item>
 
+            <el-form-item label="phone" :label-width="formLabelWidth">
+                <el-input v-model="form.phone" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="sex" :label-width="formLabelWidth">
+                <el-input :disabled="true" v-model="form.sex" auto-complete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="zone" :label-width="formLabelWidth">
+                <el-input v-model="form.zone" auto-complete="off"></el-input>
+            </el-form-item>
 
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -37,7 +33,7 @@
 
 <script>
     export default {
-        data() {
+        data(){
             return {
                 formLabelWidth: '120px',
             }
@@ -46,10 +42,10 @@
 
         methods: {
             updateForm: function (formName) {
-                let pid = formName.pid;
-                let name = formName.name;
-                let site_name = formName.site_name;
-                this.$axios.put('http://127.0.0.1:5000/api/v1/goods/' + pid, {
+                let itemId = formName.id;
+                let phone = formName.phone;
+                let zone = formName.zone;
+                this.$axios.put('http://127.0.0.1:8000/api/persons/detail/' + itemId, {
                     phone: phone,
                     zone: zone
                 })
@@ -67,5 +63,7 @@
                 this.$emit('canclemodal');
             }
         }
+
     }
+
 </script>

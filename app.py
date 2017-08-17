@@ -43,7 +43,6 @@ def initialize_app(flask_app):
     @app.before_first_request
     def create_tables():
         db.create_all()
-        import_data.generate_data()
 
     # Init MongoDB
     mongo.init_app(flask_app, config_prefix='MONGO')
@@ -61,7 +60,8 @@ def initialize_app(flask_app):
 if __name__ == '__main__':
     configure_app(app)
     initialize_app(app)
-    print(LOGO)
 
+    logger.info(LOGO)
     logger.info('Starting server at http://{}/api/ <<<<<'.format(app.config['FLASK_SERVER_NAME']))
+
     app.run(port=5000, debug=True)
