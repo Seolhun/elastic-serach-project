@@ -7,68 +7,56 @@
                 class="table">
             <el-table-column
                     fixed
-                    prop="img"
-                    label="img"
+                    prop="id"
+                    label="item_id"
                     width="100">
             </el-table-column>
             <el-table-column
-                    prop="pid"
-                    label="pid"
+                    prop="username"
+                    label="username"
+                    width="120">
+            </el-table-column>
+            <el-table-column
+                    prop="email"
+                    label="email"
+                    width="120">
+            </el-table-column>
+            <el-table-column
+                    prop="phone"
+                    label="phone"
+                    width="130">
+            </el-table-column>
+            <el-table-column
+                    prop="sex"
+                    label="sex"
                     width="100">
             </el-table-column>
             <el-table-column
-                    prop="name"
-                    label="name"
-                    width="300">
-            </el-table-column>
-            <el-table-column
-                    prop="site_name"
-                    label="site"
+                    prop="zone"
+                    label="zone"
                     width="100">
             </el-table-column>
             <el-table-column
-                    prop="query_click"
-                    label="click"
-                    width="100">
+                    prop="create_datetime"
+                    label="create_datetime"
+                    width="300"
+                    :formatter="formatter">
             </el-table-column>
             <el-table-column
-                    prop="cate1"
-                    label="cate1"
+                    fixed="right"
+                    label="Operation"
                     width="100">
-            </el-table-column>
-            <el-table-column
-                    prop="cate2"
-                    label="cate2"
-                    width="100">
-            </el-table-column>
-            <el-table-column
-                    prop="cate3"
-                    label="cate3"
-                    width="100">
-            </el-table-column>
-            <el-table-column
-                    prop="clickct"
-                    label="clickct"
-                    width="100">
-            </el-table-column>
-            <el-table-column
-                    prop="review_num"
-                    label="review_num"
-                    width="100">
-            </el-table-column>
-            <el-table-column
-                    prop="review_rate"
-                    label="review_rate"
-                    width="100">
+                <template scope="scope">
+                    <el-button @click="editItem(scope.$index, tableData)" type="text" size="large">Edit</el-button>
+                </template>
             </el-table-column>
         </el-table>
-        <!--
         <el-pagination class="pagination" layout="prev, pager, next" :total="total" :page-size="pageSize"
                        v-on:current-change="changePage">
         </el-pagination>
-        -->
         <db-modal :dialogFormVisible="dialogFormVisible" :form="form" v-on:canclemodal="dialogVisible"></db-modal>
     </div>
+
 </template>
 
 <script>
@@ -76,15 +64,15 @@
     import DbModal from './DbModal.vue'
 
     export default {
-        data() {
+        data(){
             return {
                 tableData: [],
-                apiUrl: 'http://127.0.0.1:5000/api/v1/goods/10003839',
-//                total: 0,
-//                pageSize: 10,
-//                currentPage: 1,
-                pid: '',
-                name: '',
+                apiUrl: 'http://127.0.0.1:8000/api/persons',
+                total: 0,
+                pageSize: 10,
+                currentPage: 1,
+                sex: '',
+                email: '',
                 dialogFormVisible: false,
                 form: '',
             }
@@ -92,63 +80,59 @@
         components: {
             DbModal
         },
-
-        mounted() {
-            this.getGoods();
+        mounted () {
+            this.getCustomers();
             Bus.$on('filterResultData', (data) => {
                 this.tableData = data.results;
-//                this.total = data.total_pages;
+                this.total = data.total_pages;
                 this.pageSize = data.count;
-                this.pid = data.pid;
-                this.name = data.name;
-                this.site_name = data.site_name;
-                this.cate1 = data.cate1;
-                this.cate2 = data.cate2;
-                this.cate3 = data.cate3;
+                this.email = data.email;
+                this.sex = data.sex;
+
             });
         },
 
         methods: {
+
             dialogVisible: function () {
                 this.dialogFormVisible = false;
             },
 
-            getGoods: function () {
+            getCustomers: function () {
                 this.$axios.get(this.apiUrl, {
-//                    params: {
-//                        page: this.currentPage,
-//                        pid: this.pid,
-//                        name: this.name
-//                    }
+                    params: {
+                        page: this.currentPage,
+                        sex: this.sex,
+                        email: this.email
+                    }
                 }).then((response) => {
                     this.tableData = response.data.results;
-//                    this.total = response.data.total;
-//                    this.pageSize = response.data.count;
+                    this.total = response.data.total;
+                    this.pageSize = response.data.count;
                     console.log(response.data);
                 }).catch(function (response) {
                     console.log(response)
                 });
             },
-
             changePage: function (currentPage) {
-//                this.currentPage = currentPage;
-                this.getGoods()
+                this.currentPage = currentPage;
+                this.getCustomers()
             },
-
             editItem: function (index, rows) {
                 this.dialogFormVisible = true;
-                const itemId = rows[index].pid;
-                const idurl = 'http://127.0.0.1:5000/api/v1/goods/' + itemId;
+                const itemId = rows[index].id;
+                const idurl = 'http://127.0.0.1:8000/api/persons/detail/' + itemId;
                 this.$axios.get(idurl).then((response) => {
                     this.form = response.data;
                 }).catch(function (response) {
                     console.log(response)
                 });
             },
-//            formatter(row, column) {
-//                let data = this.$moment.unix(row.create_datetime);
-//                return data.format('YYYY-MM-DD HH:mm:ss')
-//            },
+
+            formatter(row, column) {
+                let data = this.$moment.unix(row.create_datetime);
+                return data.format('YYYY-MM-DD HH:mm:ss')
+            },
         }
     }
 </script>
@@ -162,4 +146,5 @@
         margin-top: 10px;
         float: right;
     }
+
 </style>
