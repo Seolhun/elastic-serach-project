@@ -35,16 +35,15 @@ def create_index():
     # es.search(index='test-index', filter_path=['hits.hits._id', 'hits.hits._type'])
 
 
-def generate_data_batch():
+def generate_data_batch(index_name):
     goods_list = joblib.load("goods_dump.dat")
     # es.indices.put_mapping(index="goods", body=goods_list, doc_type="application/json")
     i = 0
     count = 0
     actions = []
     for goods in goods_list:
-        pid = goods["pid"]
         action = {
-            "_index": "goods",
+            "_index": index_name,
             "_type": "ko",
             "_source": {
                 "goods": goods,
@@ -54,12 +53,12 @@ def generate_data_batch():
         actions.append(action)
         print("loop", i)
         if i >= 50000:
-            success, _ = bulk(es, actions, index="goods", raise_on_error=True)
+            success, _ = bulk(es, actions, index=index_name, raise_on_error=True)
             count += success
             i = 0
             actions = []
 
-    success, _ = bulk(es, actions, index="goods", raise_on_error=True)
+    success, _ = bulk(es, actions, index=index_name, raise_on_error=True)
     count += success
     print("insert %s lines" % count)
 
