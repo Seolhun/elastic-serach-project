@@ -10,9 +10,9 @@
 <script>
     export default {
         name: 'db-header',
-        data() {
+        data () {
             return {
-                msg: 'Buzzni-vue'
+                msg: 'SanicCRUD-vue'
             }
         }
     }

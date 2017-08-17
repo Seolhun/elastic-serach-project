@@ -1,18 +1,33 @@
 import json
-import requests
+# import requests
 from sklearn.externals import joblib
 from elasticsearch import Elasticsearch
+from elasticsearch.helpers import bulk
+import threading
+
+es = Elasticsearch(hosts=["http://127.0.0.1:9200"])
+
+
+class IndexDataThread(threading.Thread):
+    def __init__(self, thread_id, name, counter):
+        threading.Thread.__init__(self)
+        self.thread_id = thread_id
+        self.name = name
+        self.counter = counter
+
+    def run(self):
+        print("Starting " + self.name)
+        create_index("goods")
+        generate_data_batch("goods")
+        print("Exiting " + self.name)
 
 
 # from api.goods.models import GoodsModel
-
-
-def generate_data():
-    es = Elasticsearch(hosts=["http://127.0.0.1:9200"])
+def create_index(index_name):
     mapping = '''
         {
           "mappings": {
-            "goods": { 
+            "goods2": { 
               "_all":       { "enabled": false  }, 
               "properties": { 
                 "pid":    { "type": "text"  }, 
@@ -31,37 +46,37 @@ def generate_data():
           }
         }
         '''
-    es.indices.create(index="goods", ignore=400, body=mapping)
+    es.indices.create(index=index_name, ignore=400, body=mapping)
     # es.search(index='test-index', filter_path=['hits.hits._id', 'hits.hits._type'])
 
+
+def generate_data_batch(index_name):
     goods_list = joblib.load("goods_dump.dat")
     # es.indices.put_mapping(index="goods", body=goods_list, doc_type="application/json")
+    i = 0
+    count = 0
+    actions = []
     for goods in goods_list:
-        pid = goods["pid"]
-        es.index(index="goods", doc_type="generated", id=pid, body=goods)
-        # print(goods_list)
-        # print("-----", goods_list[:5])
-        # headers = {'Content-type': 'application/json'}
-        # response = requests.post("http://127.0.0.1:9200/goods/external/_bulk?pretty", headers=headers, data=goods_list[:5])
-        # for goods in goods_list:
-        #     if GoodsModel.find_by_id(goods['pid']):
-        #         return;
-        #
-        #     item = GoodsModel(goods['pid'])
-        #     item.name = goods['name']
-        #     item.site_name = goods['site_name']
-        #     item.img = goods['img']
-        #     item.query_click = goods['query_click']
-        #     item.cate1 = goods['cate1']
-        #     item.cate2 = goods['cate2']
-        #     item.cate3 = goods['cate3']
-        #
-        #     item.clickct = int(goods['clickct'])
-        #     item.review_num = int(goods['review_num'])
-        #     item.review_rate = int(goods['review_rate'])
-        #
-        #     item.save_to_db()
-        # return response.json()
+        action = {
+            "_index": index_name,
+            "_type": "ko",
+            "_source": {
+                "goods": goods,
+            }
+        }
+        i += 1
+        actions.append(action)
+        if i >= 50000:
+            print("success", i)
+            success, _ = bulk(es, actions, index=index_name, raise_on_error=True)
+            count += success
+            i = 0
+            actions = []
+
+    success, _ = bulk(es, actions, index=index_name, raise_on_error=True)
+    count += success
+    print("insert %s lines" % count)
 
 
-generate_data()
+thread1 = IndexDataThread(1, "Thread-1", 1)
+thread1.start()
