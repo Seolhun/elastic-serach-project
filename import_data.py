@@ -8,7 +8,7 @@ es = Elasticsearch(hosts=["http://127.0.0.1:9200"])
 
 
 # from api.goods.models import GoodsModel
-def create_index():
+def create_index(index_name):
     mapping = '''
         {
           "mappings": {
@@ -31,7 +31,7 @@ def create_index():
           }
         }
         '''
-    es.indices.create(index="goods", ignore=400, body=mapping)
+    es.indices.create(index=index_name, ignore=400, body=mapping)
     # es.search(index='test-index', filter_path=['hits.hits._id', 'hits.hits._type'])
 
 
@@ -51,8 +51,8 @@ def generate_data_batch(index_name):
         }
         i += 1
         actions.append(action)
-        print("loop", i)
         if i >= 50000:
+            print("success", i)
             success, _ = bulk(es, actions, index=index_name, raise_on_error=True)
             count += success
             i = 0
@@ -63,5 +63,5 @@ def generate_data_batch(index_name):
     print("insert %s lines" % count)
 
 
-create_index()
-generate_data_batch()
+create_index("goods")
+generate_data_batch("goods")
