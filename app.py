@@ -3,7 +3,6 @@ from flask import Flask
 from flask_cors import CORS
 from flask_restful import Api
 
-import import_data
 from api import LOGO, api_bp
 from api.goods.views import Goods, GoodsList
 from settings import config as conf

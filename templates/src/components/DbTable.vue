@@ -7,53 +7,21 @@
                 class="table">
             <el-table-column
                     fixed
-                    prop="id"
-                    label="item_id"
-                    width="100">
+                    prop="pid"
+                    label="pid"
+                    width="200">
             </el-table-column>
             <el-table-column
-                    prop="username"
-                    label="username"
-                    width="120">
+                    prop="img"
+                    label="img"
+                    width="300">
             </el-table-column>
             <el-table-column
-                    prop="email"
-                    label="email"
-                    width="120">
-            </el-table-column>
-            <el-table-column
-                    prop="phone"
-                    label="phone"
-                    width="130">
-            </el-table-column>
-            <el-table-column
-                    prop="sex"
-                    label="sex"
-                    width="100">
-            </el-table-column>
-            <el-table-column
-                    prop="zone"
-                    label="zone"
-                    width="100">
-            </el-table-column>
-            <el-table-column
-                    prop="create_datetime"
-                    label="create_datetime"
-                    width="300"
-                    :formatter="formatter">
-            </el-table-column>
-            <el-table-column
-                    fixed="right"
-                    label="Operation"
-                    width="100">
-                <template scope="scope">
-                    <el-button @click="editItem(scope.$index, tableData)" type="text" size="large">Edit</el-button>
-                </template>
+                    prop="name"
+                    label="name"
+                    width="500">
             </el-table-column>
         </el-table>
-        <el-pagination class="pagination" layout="prev, pager, next" :total="total" :page-size="pageSize"
-                       v-on:current-change="changePage">
-        </el-pagination>
         <db-modal :dialogFormVisible="dialogFormVisible" :form="form" v-on:canclemodal="dialogVisible"></db-modal>
     </div>
 
@@ -64,15 +32,13 @@
     import DbModal from './DbModal.vue'
 
     export default {
-        data(){
+        data() {
             return {
                 tableData: [],
-                apiUrl: 'http://127.0.0.1:8000/api/persons',
-                total: 0,
-                pageSize: 10,
-                currentPage: 1,
-                sex: '',
-                email: '',
+                apiUrl: 'http://127.0.0.1:9200/goods/_search',
+                pid: '',
+                img: '',
+                name: '',
                 dialogFormVisible: false,
                 form: '',
             }
@@ -80,35 +46,30 @@
         components: {
             DbModal
         },
-        mounted () {
-            this.getCustomers();
+        mounted() {
+            this.getGoods();
             Bus.$on('filterResultData', (data) => {
+                console.log("data", data);
                 this.tableData = data.results;
-                this.total = data.total_pages;
-                this.pageSize = data.count;
-                this.email = data.email;
-                this.sex = data.sex;
-
+                this.pid = data.pid;
+                this.img = data.img;
+                this.name = data.name;
             });
         },
 
         methods: {
-
             dialogVisible: function () {
                 this.dialogFormVisible = false;
             },
-
-            getCustomers: function () {
+            getGoods: function () {
                 this.$axios.get(this.apiUrl, {
                     params: {
-                        page: this.currentPage,
-                        sex: this.sex,
-                        email: this.email
+                        pid: this.pid,
+                        img: this.img,
+                        name: this.name
                     }
                 }).then((response) => {
                     this.tableData = response.data.results;
-                    this.total = response.data.total;
-                    this.pageSize = response.data.count;
                     console.log(response.data);
                 }).catch(function (response) {
                     console.log(response)
@@ -116,19 +77,18 @@
             },
             changePage: function (currentPage) {
                 this.currentPage = currentPage;
-                this.getCustomers()
+                this.getGoods()
             },
             editItem: function (index, rows) {
                 this.dialogFormVisible = true;
-                const itemId = rows[index].id;
-                const idurl = 'http://127.0.0.1:8000/api/persons/detail/' + itemId;
+                const pid = rows[index].pid;
+                const idurl = 'http://127.0.0.1:9200/goods/_search';
                 this.$axios.get(idurl).then((response) => {
                     this.form = response.data;
                 }).catch(function (response) {
                     console.log(response)
                 });
             },
-
             formatter(row, column) {
                 let data = this.$moment.unix(row.create_datetime);
                 return data.format('YYYY-MM-DD HH:mm:ss')
