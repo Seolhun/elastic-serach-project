@@ -79,7 +79,7 @@
         data() {
             return {
                 tableData: [],
-                apiUrl: 'http://127.0.0.1:5000/api/v1/goods/10003839',
+                apiUrl: 'http://127.0.0.1:5000/api/v1/goods/10000397',
 //                total: 0,
 //                pageSize: 10,
 //                currentPage: 1,
