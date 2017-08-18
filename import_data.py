@@ -25,7 +25,7 @@ def create_index(index_name):
     mapping = '''
         {
           "mappings": {
-            "goods2": { 
+            "goods": { 
               "_all":       { "enabled": false  }, 
               "properties": { 
                 "pid":    { "type": "text"  }, 
@@ -57,7 +57,7 @@ def generate_data_batch(index_name):
     for goods in goods_list:
         action = {
             "_index": index_name,
-            "_type": "ko",
+            "_type": "item",
             "_source": {
                 "goods": goods,
             }

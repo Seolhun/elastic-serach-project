@@ -24,7 +24,6 @@
         </el-table>
         <db-modal :dialogFormVisible="dialogFormVisible" :form="form" v-on:canclemodal="dialogVisible"></db-modal>
     </div>
-
 </template>
 
 <script>
@@ -56,7 +55,6 @@
                 this.name = data.name;
             });
         },
-
         methods: {
             dialogVisible: function () {
                 this.dialogFormVisible = false;
