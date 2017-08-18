@@ -1,11 +1,16 @@
 import unittest
 
-import awesome
+
+def smile():
+    return ":)"
+
+def frown():
+    return ":("
 
 
 class TestMethods(unittest.TestCase):
     def test_add(self):
-        self.assertEqual(awesome.smile(), ":)")
+        self.assertEqual(smile(), ":)")
 
 
 if __name__ == '__main__':
