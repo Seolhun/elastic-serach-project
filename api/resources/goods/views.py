@@ -8,20 +8,23 @@ class Goods(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('pid', type=str, required=True, help="This pid field cannot be left blank!")
 
-    def get(self, pid):
+    @classmethod
+    def get(cls, pid):
         goods = GoodsModel.find_by_id(pid)
         if goods:
             return goods.json()
         return {'message': 'goods not found'}, 404
 
-    def delete(self, pid):
+    @classmethod
+    def delete(cls, pid):
         goods = GoodsModel.find_by_id(pid)
         if goods:
             goods.delete_from_db()
 
         return {'message': 'stack deleted'}
 
-    def put(self, pid):
+    @classmethod
+    def put(cls, pid):
         data = Goods.parser.parse_args()
         goods = GoodsModel.find_by_id(pid)
         if goods:

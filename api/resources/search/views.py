@@ -9,21 +9,25 @@ class Search(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('sv', type=str, required=True, help="This search value field cannot be left blank!")
 
-    def get(self):
+    @classmethod
+    def get(cls):
         data = Search.parser.parse_args()
-        logger.debug("--------{}-------".format(data))
-        result = SearchService.search_text(data['sv'])
+        search_text = data['sv'];
+        logger.info("--------{}-------".format(search_text))
+        result = SearchService.search_text(search_text)
+        return result, 404
+        # return {'message': '{} has no data'.format(data)}, 404
 
-        return {'message': '{} has no data'.format(result)}, 404
-
-    def delete(self, search):
+    @classmethod
+    def delete(cls, search):
         goods = GoodsModel.find_by_id(search)
         if goods:
             goods.delete_from_db()
 
         return {'message': 'stack deleted'}
 
-    def put(self, pid):
+    @classmethod
+    def put(cls, pid):
         data = Search.parser.parse_args()
         goods = GoodsModel.find_by_id(pid)
         if goods:
