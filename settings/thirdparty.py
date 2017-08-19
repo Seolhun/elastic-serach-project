@@ -1,3 +1,4 @@
 from elasticsearch import Elasticsearch
+from settings import config
 
-es = Elasticsearch(hosts=["http://127.0.0.1:9200"])
+es = Elasticsearch(hosts=[config.ELASTIC_SEARCH_HOST])

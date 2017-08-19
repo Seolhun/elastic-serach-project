@@ -13,18 +13,8 @@ class Search(Resource):
     def get(cls):
         data = Search.parser.parse_args()
         search_text = data['sv']
-        # result = SearchService.search_text(search_text)
-        result0 = SearchService.search_text(search_text)
-        logger.info("----result0----{}".format(result0))
-        result1 = SearchService.search_test1(search_text)
-        logger.info("----result1----{}".format(result1))
-        result2 = SearchService.search_test2(search_text)
-        logger.info("----result2----{}".format(result2))
-        result3 = SearchService.search_test3(search_text)
-        logger.info("----result3----{}".format(result3))
-        result4 = SearchService.search_test4(search_text)
-        logger.info("----result4----{}".format(result4))
-        return result4, 404
+        result = SearchService.search_text(search_text)
+        return result, 404
         # return {'message': '{} has no data'.format(data)}, 404
 
     @classmethod

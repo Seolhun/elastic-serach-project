@@ -19,6 +19,9 @@ MONGO_HOST = '127.0.0.1'
 MONGO_PORT = 27017
 MONGO_DBNAME = 'buzzni'
 
+# MongoDB Settings
+ELASTIC_SEARCH_HOST = '127.0.0.1:9200'
+
 # Page Config
 MAX_PER_PAGE = 5
 
