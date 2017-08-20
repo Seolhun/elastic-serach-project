@@ -4,7 +4,7 @@ import threading
 from elasticsearch.helpers import bulk
 from sklearn.externals import joblib
 
-from settings.thirdparty import es
+from settings.elasticsearch import es
 
 
 class IndexDataThread(threading.Thread):

@@ -1,8 +1,9 @@
 from settings.logging import logger
-from settings.thirdparty import es
+from settings.elasticsearch import es
 
 
 def search_text(search_value):
+    # Searching All
     query = {
         'query': {
             'match_all': {
@@ -10,22 +11,14 @@ def search_text(search_value):
             }
         }
     }
-
-    query = {
-        'query': {
-            'match': {
-                '_id': 'AV355jjz07T8wCwjy0ml',
-            }
-        }
-    }
-
-    query = {
-        'query': {
-            'match': {
-                'site_name': search_value,
-            }
-        }
-    }
+    # # Search By site_name
+    # query = {
+    #     'query': {
+    #         'match': {
+    #             'site_name': search_value,
+    #         }
+    #     }
+    # }
 
     # query = {
     #     "query": {
@@ -58,6 +51,5 @@ def search_text(search_value):
     logger.info("------------------------------------------------------------------------")
     good_list = []
     for hit in res['hits']['hits']:
-        # good_list.append(hit["_source"]['goods'])
         good_list.append(hit)
     return {'goods_list': good_list}

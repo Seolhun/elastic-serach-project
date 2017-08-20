@@ -6,7 +6,7 @@ from flask_restful import Api
 from api import LOGO
 from api.resources import api_bp
 from api.resources.goods.views import Goods, GoodsList
-from api.resources.search.views import Search
+from api.resources.search.views import Search, SearchList
 from settings import config as conf
 # Buzzni Database Config
 from settings.database import db, mongo

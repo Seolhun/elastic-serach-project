@@ -22,28 +22,26 @@
                     width="500">
             </el-table-column>
         </el-table>
-        <db-modal :dialogFormVisible="dialogFormVisible" :form="form" v-on:canclemodal="dialogVisible"></db-modal>
+        <bz-modal :dialogFormVisible="dialogFormVisible" :form="form" v-on:cancelModal="dialogVisible"></bz-modal>
     </div>
 </template>
 
 <script>
     import Bus from '../eventBus'
-    import DbModal from './DbModal.vue'
+    import BzModal from './BzModal.vue'
 
     export default {
         data() {
             return {
                 tableData: [],
-                apiUrl: 'http://127.0.0.1:9200/goods/_search',
-                pid: '',
-                img: '',
-                name: '',
+                apiUrl: 'http://127.0.0.1:5000/api/v1/search',
+                sv: '',
                 dialogFormVisible: false,
                 form: '',
             }
         },
         components: {
-            DbModal
+            BzModal
         },
         mounted() {
             this.getGoods();
@@ -61,11 +59,10 @@
             },
             getGoods: function () {
                 this.$axios.get(this.apiUrl, {
-                    params: {
-                        pid: this.pid,
-                        img: this.img,
-                        name: this.name
-                    }
+//                    params: {
+//                        sv: this.sv,
+//                    },
+//                    headers: {'X-Requested-With': 'XMLHttpRequest'},
                 }).then((response) => {
                     this.tableData = response.data.results;
                     console.log(response.data);
@@ -80,7 +77,7 @@
             editItem: function (index, rows) {
                 this.dialogFormVisible = true;
                 const pid = rows[index].pid;
-                const idurl = 'http://127.0.0.1:9200/goods/_search';
+                const idurl = 'http://127.0.0.1:5000/goods/_search';
                 this.$axios.get(idurl).then((response) => {
                     this.form = response.data;
                 }).catch(function (response) {

@@ -1,51 +1,50 @@
 <template>
     <div class="wrapper">
-        <db-header>
+        <bz-header>
 
+        </bz-header>
 
-        </db-header>
         <el-row class="container">
             <el-col :span="4" class="menu">
-                <db-sidebar></db-sidebar>
+                <bz-sidebar></bz-sidebar>
             </el-col>
             <el-col :span="20" class="content">
-                <filterinput></filterinput>
-                <db-table></db-table>
+                <bz-filter></bz-filter>
+                <bz-table></bz-table>
 
             </el-col>
-
-
         </el-row>
 
         <el-row>
             <el-col :span="24">
                 <footer class="footer">
-                    <db-footer>
+                    <bz-footer>
 
-                    </db-footer>
+                    </bz-footer>
                 </footer>
-
             </el-col>
         </el-row>
+
+
     </div>
 </template>
 <script>
-    import DbHeader from './components/Header.vue'
-    import DbSidebar from './components/DbSidebar.vue'
-    import Filterinput from './components/Filterinput.vue'
-    import DbTable from './components/DbTable.vue'
-    import Footer from './components/Footer.vue'
+    import BzHeader from './components/BzHeader.vue'
+    import BzSidebar from './components/BzSidebar.vue'
+    import BzFilter from './components/BzFilter.vue'
+    import BzTable from './components/BzTable.vue'
+    import BzFooter from './components/BzFooter.vue'
     import ElRow from "element-ui/packages/row/src/row";
 
     export default {
         name: 'app',
         components: {
             ElRow,
-            DbSidebar,
-            DbHeader,
-            Filterinput,
-            DbTable,
-            Footer
+            BzHeader,
+            BzSidebar,
+            BzFilter,
+            BzTable,
+            BzFooter
         },
     }
 
@@ -58,10 +57,6 @@
         display: flex;
         min-height: 100vh;
         flex-direction: column;
-    }
-
-    .el-menu, body, html {
-        height: 100%;
     }
 
     .wrapper {
