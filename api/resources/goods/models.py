@@ -1,4 +1,5 @@
 from settings.database import db
+from sqlalchemy.orm import Session
 
 '''
     "pid": "1194012460",
@@ -71,6 +72,16 @@ class GoodsModel(db.Model):
         return cls.query.order_by(cls.pid)
 
     def save_to_db(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def save_to_db_batch(self):
+        session = Session(bind=None)
+        session.bulk_insert_mappings(GoodsModel, [
+            dict(
+                
+            )
+        ])
         db.session.add(self)
         db.session.commit()
 

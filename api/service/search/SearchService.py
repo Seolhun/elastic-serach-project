@@ -1,24 +1,55 @@
-from datetime import datetime
+from settings.logging import logger
+from settings.elasticsearch import es
 
-from elasticsearch import Elasticsearch
 
-# by default we connect to localhost:9200
-es = Elasticsearch()
+def search_text(search_value):
+    # Searching All
+    query = {
+        'query': {
+            'match_all': {
 
-doc = {
-    'author': 'kimchy',
-    'text': 'Elasticsearch: cool. bonsai cool.',
-    'timestamp': datetime.now(),
-}
-res = es.index(index="test-index", doc_type='tweet', id=1, body=doc)
-print(res['created'])
+            }
+        }
+    }
+    # # Search By site_name
+    # query = {
+    #     'query': {
+    #         'match': {
+    #             'site_name': search_value,
+    #         }
+    #     }
+    # }
 
-res = es.get(index="test-index", doc_type='tweet', id=1)
-print(res['_source'])
+    # query = {
+    #     "query": {
+    #         "constant_score": {
+    #             "filter": {
+    #                 "term": {
+    #                     "site_name": search_value
+    #                 }
+    #             }
+    #         }
+    #     }
+    # }
+    # query = {
+    #     "query": {
+    #         "multi_match": {
+    #             "query": search_value,
+    #             "type": "cross_fields",
+    #             "fields": ["site_name", "name", 'cate1', 'cate2', 'cate3']
+    #         }
+    #     }
+    # }
 
-es.indices.refresh(index="test-index")
+    # "type": "cross_fields",
+    # "type": "phrase_prefix",
+    res = es.search(index="goods", doc_type="item", body=query)
 
-res = es.search(index="test-index", body={"query": {"match_all": {}}})
-print("Got %d Hits:" % res['hits']['total'])
-for hit in res['hits']['hits']:
-    print("%(timestamp)s %(author)s: %(text)s" % hit["_source"])
+    # responses = es.search(index="goods", body=query)
+    logger.info("------------------------------------------------------------------------")
+    logger.info("search_text {}".format(res))
+    logger.info("------------------------------------------------------------------------")
+    good_list = []
+    for hit in res['hits']['hits']:
+        good_list.append(hit)
+    return {'goods_list': good_list}

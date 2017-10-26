@@ -9,7 +9,7 @@
 
 <script>
     export default {
-        name: 'db-header',
+        name: 'bz-header',
         data() {
             return {
                 msg: 'Buzzni Searching Project'

@@ -12,7 +12,7 @@
             </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
-            <el-button :plain="true" type="danger" v-on:click="canclemodal">Cancel</el-button>
+            <el-button :plain="true" type="danger" v-on:click="cancelModal">Cancel</el-button>
             <el-button :plain="true" @click="updateForm(form)">Save</el-button>
         </div>
     </el-dialog>
@@ -33,7 +33,7 @@
                 let pid = formName.pid;
                 let img = formName.img;
                 let name = formName.name;
-                this.$axios.put('http://127.0.0.1:9200/goods/_search', {
+                this.$axios.put('http://127.0.0.1:5000/goods/_search', {
                     pid: pid,
                     img: img,
                     name: name
@@ -47,8 +47,9 @@
                     });
                 location.reload();
             },
-            canclemodal: function () {
-                this.$emit('canclemodal');
+
+            cancelModal: function () {
+                this.$emit('cancelModal');
             }
         }
 

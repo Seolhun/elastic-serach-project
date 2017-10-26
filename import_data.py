@@ -1,11 +1,10 @@
 # import requests
 import threading
 
-from elasticsearch import Elasticsearch
 from elasticsearch.helpers import bulk
 from sklearn.externals import joblib
 
-es = Elasticsearch(hosts=["http://127.0.0.1:9200"])
+from settings.elasticsearch import es
 
 
 class IndexDataThread(threading.Thread):
@@ -24,28 +23,26 @@ class IndexDataThread(threading.Thread):
 
 # from api.goods.models import GoodsModel
 def create_index(index_name):
-    mapping = '''
-        {
-          "mappings": {
-            "goods2": { 
-              "_all":       { "enabled": false  }, 
-              "properties": { 
-                "pid":    { "type": "text"  }, 
-                "site_name":     { "type": "text"  }, 
-                "name":     { "type": "text"  }, 
-                "img":     { "type": "text"  }, 
-                "query_click":     { "type": "text"  }, 
-                "cate1":     { "type": "text"  }, 
-                "cate2":     { "type": "text"  }, 
-                "cate3":     { "type": "text"  }, 
-                "review_num":     { "type": "integer"  }, 
-                "review_rate":     { "type": "integer"  }, 
-                "clickct":     { "type": "integer"  }
-              }
+    mapping = {
+        "mappings": {
+            "item": {
+                "_all": {"enabled": False},
+                "properties": {
+                    "pid": {"type": "text"},
+                    "site_name": {"type": "text"},
+                    "name": {"type": "text"},
+                    "img": {"type": "text"},
+                    "query_click": {"type": "text"},
+                    "cate1": {"type": "text"},
+                    "cate2": {"type": "text"},
+                    "cate3": {"type": "text"},
+                    "review_num": {"type": "integer"},
+                    "review_rate": {"type": "integer"},
+                    "clickct": {"type": "integer"}
+                }
             }
-          }
         }
-        '''
+    }
     es.indices.create(index=index_name, ignore=400, body=mapping)
     # es.search(index='test-index', filter_path=['hits.hits._id', 'hits.hits._type'])
 
@@ -56,13 +53,11 @@ def generate_data_batch(index_name):
     i = 0
     count = 0
     actions = []
-    for goods in goods_list:
+    for item in goods_list:
         action = {
             "_index": index_name,
-            "_type": "ko",
-            "_source": {
-                "goods": goods,
-            }
+            "_type": "item",
+            "_source": item
         }
         i += 1
         actions.append(action)

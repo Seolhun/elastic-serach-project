@@ -10,12 +10,13 @@ clean:
 db:
 		python import_data.py
 
-install:
+first-install:
 		pip install -r requirements.txt && \
 		cd $(project_path)/templates && npm install
 
-run:
+first-run:
 		mkdir $(project_path)/logs && python $(project_server) && cd $(project_path)/templates && npm run dev
+
 
 back-install:
 		pip install -r requirements.txt
@@ -28,7 +29,3 @@ front-install:
 
 front:
 		cd $(project_path)/templates && npm run dev
-
-test:
-		cd $(project_path)/templates && \
-		py.test -q ../tests/test-view.py

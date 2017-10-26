@@ -5,7 +5,7 @@
 <script>
 
     export default {
-        name: 'db-sidebar',
+        name: 'bz-sidebar',
         data() {
             return {
                 msg: 'Searching'

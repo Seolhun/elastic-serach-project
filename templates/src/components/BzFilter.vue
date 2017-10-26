@@ -30,7 +30,7 @@
 
             <div>
                 <el-input type="warning" style="width: 70%"></el-input>
-                <el-button :plain="true" type="warning" v-on:click="canclemodal">Search</el-button>
+                <el-button :plain="true" type="warning">Search</el-button>
             </div>
 
         </el-form>
@@ -44,7 +44,7 @@
 
     export default {
         components: {ElInput},
-        name: 'filterinput',
+        name: 'bz-filter',
         data() {
             return {
                 type_options: [],
@@ -61,11 +61,10 @@
             'formInline.sex': 'filterResultData',
             'formInline.email': 'filterResultData'
         },
-
         methods: {
             selectDemo: function (params) {
                 if (params) {
-                    this.$axios.get("http://127.0.0.1:8000/api/persons/sex")
+                    this.$axios.get("http://127.0.0.1:5000/api/persons/sex")
                         .then((response) => {
                             this.type_options = response.data;
                             console.log(response.data);
@@ -77,7 +76,7 @@
             },
             filterResultData: _.debounce(
                 function () {
-                    this.$axios.get("http://127.0.0.1:8000/api/persons", {
+                    this.$axios.get("http://127.0.0.1:5000/api/persons", {
                         params: {
                             sex: this.formInline.sex,
                             email: this.formInline.email,
